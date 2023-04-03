@@ -1,5 +1,6 @@
 //A simple Knack REST API interface that handles the 10 request/sec
 //limitation of the KNACK REST API.
+const KNACK_API_BASE_URL = "https://api.sv.knack.com";
 KnackApi = {};
 KnackApi.callCount = 0;
 KnackApi.knackCall = async function(type, urlParams, obj = null) {
