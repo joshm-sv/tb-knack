@@ -5,7 +5,7 @@ async function initializeGoogleAnalytics() {
     await new Promise(resolve => {
       window.dataLayer = window.dataLayer || [];
       window.gtag = function gtag() { dataLayer.push(arguments); }
-      LazyLoad.js([`https://www.googletagmanager.com/gtag/js?id=${measurementID}`], resolve);
+    //   LazyLoad.js([`https://www.googletagmanager.com/gtag/js?id=${measurementID}`], resolve);
       $('body').append(`<script class="lazyload" src="https://www.googletagmanager.com/gtag/js?id=${measurementID}></script>`)
     });
   }
