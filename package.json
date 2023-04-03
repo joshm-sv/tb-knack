@@ -1,0 +1,28 @@
+{
+  "name": "externalization-testing",
+  "version": "1.0.0",
+  "description": "",
+  "main": "webpack.config.js",
+  "dependencies": {},
+  "devDependencies": {
+    "html-webpack-plugin": "^5.5.0",
+    "terser-webpack-plugin": "^5.3.7",
+    "uglify-js": "^3.17.4",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^5.76.3",
+    "webpack-cli": "^5.0.1"
+  },
+  "scripts": {
+    "build": "webpack --mode=production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Strategic-Visionz/externalization-testing.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Strategic-Visionz/externalization-testing/issues"
+  },
+  "homepage": "https://github.com/Strategic-Visionz/externalization-testing#readme"
+}
