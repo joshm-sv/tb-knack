@@ -8,7 +8,10 @@ const fs = require('fs');
 const jsFilesToAdd = [
   './js/image_uploader/imageUploadIntegrationArray.js',
   './js/image_uploader/imageuploader.js',
-  './js/image_uploader/filepondIntegration.js'
+  './js/image_uploader/filepondIntegration.js',
+  './js/api/KnackApi.js',
+  './js/api/KnackViewApi.js',
+  './js/api/KnackJsApi.js',
 ];
 
 // Get the absolute path of the 'renders' folder inside the 'js' folder
