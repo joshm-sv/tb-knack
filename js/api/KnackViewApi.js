@@ -1,5 +1,5 @@
 /******KNACK VIEW BASED API */
-const KNACK_API_BASE_URL = "https://api.sv.knack.com";
+var KNACK_API_BASE_URL = "https://api.sv.knack.com";
 KnackViewApi = {};
 KnackViewApi.callCount = 0;
 KnackViewApi.knackCall = async function(type, urlParams, obj = null) {

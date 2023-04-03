@@ -1,7 +1,7 @@
 /*************
 KNACK JS API
 ************/
-const KNACK_API_BASE_URL = "https://api.sv.knack.com";
+var KNACK_API_BASE_URL = "https://api.sv.knack.com";
 var KnackJs = function(info) {
     // Knack info
     this.applicationID = info.applicationID;
