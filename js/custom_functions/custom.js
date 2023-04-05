@@ -1,4 +1,3 @@
-
 var currentEstDT = new Date();
 var currentDate = currentEstDT.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', timeZone: 'America/New_York' });
 currentEstDT = currentEstDT.toLocaleString('en-US', {timeZone: 'America/New_York'}).replace(",","");
@@ -23,10 +22,18 @@ function prevServiceDate(){
     d.setDate( d.getDate() - 1 );
         return d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
     }
- }
+}
+
+function addImagePreview(){
+    for (let i = 0; i < $('img').length; i++) {//This will makes the Multiple Image Upload Images Preview Full size image
+        $($('img')[i]).attr('data-kn-img-gallery', $($('img')[i]).attr('src'))
+        $($('img')[i]).wrap('<a class="kn-img-gallery" href="#"></a>');
+    }
+}
 
 module.exports = {
     searchParam: searchParam,
     prevServiceDate: prevServiceDate,
-    currentServiceDate: currentServiceDate
+    currentServiceDate: currentServiceDate,
+    addImagePreview: addImagePreview
 };

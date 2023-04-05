@@ -1,3 +1,9 @@
+var asHeader = {
+    'X-Knack-Application-Id': Knack.application_id,
+    "X-Knack-REST-API-Key": window.knackRestApiKey,
+    'Authorization': Knack.getUserToken()
+};
+
 // view_68 Butler Today's Services
 $(document).on('knack-view-render.view_68', function(event, view, data){
     // Create the label as a jQuery object

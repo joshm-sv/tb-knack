@@ -602,14 +602,7 @@ $(document).on('knack-view-render.view_5467', function(event, view, data){
     $('.field_614').hide();
     $('.field_615').hide();
     $('.field_3023').hide();
-   
-    function createContainer(){
-      for(var i = 0; i < data.length; i++){
-       $($('.infraction-image-cont')[i]).append(`<div class="fotorama row"
-          data-nav="thumbs" id="fotoramaDashInfra_${i}">
-          </div>`);
-      }
-    }
+
     function createImageContainer(){
       for(var i = 0; i < data.length; i++){
         $($($('.uploadInfractionBtn')[i]).parents()[4]).hide();
@@ -640,15 +633,6 @@ $(document).on('knack-view-render.view_5467', function(event, view, data){
       }
     }
     createImageContainer();
-   
-    function addImagePreview2(){
-      for (let i = 0; i < $('img').length; i++) {//This will makes the Multiple Image Upload Images Preview Full size image
-        if($($('img')[i]).attr('data-kn-img-gallery') === undefined){
-          $($('img')[i]).attr('data-kn-img-gallery', $($('img')[i]).attr('src'))
-          $($('img')[i]).wrap('<a class="kn-img-gallery" href="#"></a>');
-        }
-      }
-    }
    
     $($('#view_5467 .kn-special-title')[0]).on('click', function(){
           $($('.uploadInfractionBtn')[0]).click()
@@ -1250,6 +1234,19 @@ $(document).on('knack-form-submit.view_3568', function(event, view, record) {
      }
 });
 
+//view_5278 Community Flyer PDF Version 2022
+$(document).on('knack-view-render.view_5278', function(event, view, data){
+    var pdfView = `<div style="width:90%; margin: auto; margin-top: 20px">
+    <button class="delete close-modal" id="sv_pdf_close"><i class="fa fa-close" style="font-size:24px"></i></button>
+    <iframe src="${data.field_2904_raw}" width="100%" height="600" style="border:none;"></iframe>
+    </div>`
+    $('#kn-modal-bg-0').append(pdfView)
+    $('.kn-modal').hide()
+    $('#sv_pdf_close').on('click', function(){
+      $('.close-modal').click();
+    })
+});
+
  // NEW POPUP FOR COMMUNITY CONCIERGE
  var comsActivePopups = [] //Popups that will be shown
  var comsScheduledPopups = [] //Popups in the Community's Field
@@ -1487,3 +1484,176 @@ $(document).on('knack-form-submit.view_3568', function(event, view, record) {
  }
 
 // END NEW POPUP FOR COMMUNITY CONCIERGE
+
+$(document).on('knack-view-render.view_5234', async function(event, view, data){
+    if( $('#sv_carousel_bs').length == 0 ){
+      var sv_car = `<script class="lazyload" src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script><script class="lazyload" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script><script class="lazyload" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>`;
+      $('body').append(sv_car);
+    }
+});
+
+$(document).on('knack-form-submit.view_5233', function(event, view, record) {
+    swal({
+        title: `Thank you for your feedback!`,
+        icon: "success",
+        button: "Close"
+    })
+    $('#sv_dont_show_survey').click();
+    $('p.sticky').addClass('hideMe');
+    $('#sv_survey_link').addClass('hideMe');
+});
+
+$(document).on('knack-view-render.view_5817', function(event, view, data){
+    if( $('#swal').length === 0 ){
+     $('head').append(`<script class="lazyload" id="swal" src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>`);
+   }
+  });
+  
+$(document).on('knack-form-submit.view_5817', function(event, view, record) {
+    swal({
+       title: `Thank you for your feedback!`,
+       icon: "success",
+       button: "Close"
+   })
+});
+
+//view_5233 CC > Notice 
+$(document).on('knack-view-render.view_5233', function(event, view, data){
+    if( $('#swal').length === 0 ){
+      $('head').append(`<script class="lazyload" id="swal" src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>`);
+    }
+});
+
+//view_5438 Service Hazard New Address CM
+$(document).on('knack-view-render.view_5438', function(event, view, data){
+    $('#view_5438').hide();
+    let script = document.createElement('script');
+    script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js';
+    script.class = 'lazyload';
+    document.documentElement.firstChild.appendChild(script);
+    if( $('#desoSlide').length === 0 ){
+        $('head').append(`<script id="desoSlide" src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.min.js" integrity="sha512-cWEytOR8S4v/Sd3G5P1Yb7NbYgF1YAUzlg1/XpDuouZVo3FEiMXbeWh4zewcYu/sXYQR5PgYLRbhf18X/0vpRg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+          <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">`);
+    }
+   
+    $('#view_4260').prepend(`<div class="fotorama"
+          data-nav="thumbs" id="service_hazard_fotorama">
+      </div>`)
+    for(var i = 0; i < data.length; i++){
+      $('#service_hazard_fotorama').append(`
+      <a href="${i+1}.jpg"><img src="${data[i].field_3023_raw}"></a>`)
+    }
+   
+   });
+   
+   //view_5508 Service Hazard New Address CM
+   $(document).on('knack-view-render.view_5508', function(event, view, data){
+    $('#view_5508').hide();
+    let script = document.createElement('script');
+    script.src = 'https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js';
+    script.class = 'lazyload';
+    document.documentElement.firstChild.appendChild(script);
+    if( $('#desoSlide').length === 0 ){
+        $('head').append(`<script id="desoSlide" src="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.min.js" integrity="sha512-cWEytOR8S4v/Sd3G5P1Yb7NbYgF1YAUzlg1/XpDuouZVo3FEiMXbeWh4zewcYu/sXYQR5PgYLRbhf18X/0vpRg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+          <link  href="https://cdnjs.cloudflare.com/ajax/libs/fotorama/4.6.4/fotorama.css" rel="stylesheet">`);
+    }
+   
+    $('#view_3718').prepend(`<div class="fotorama hideMe"
+       data-nav="thumbs" id="infraction_fotorama">
+   </div>`)
+    for(var i = 0; i < data.length; i++){
+      $('#infraction_fotorama').append(`
+      <a href="${i+1}.jpg"><img src="${data[i].field_2237_raw}"></a>`)
+    }
+    $('#infraction_fotorama').removeClass('hideMe')
+});
+
+$(document).on('knack-view-render.view_5499', function(event, view, data){
+    addImagePreview();
+   });
+   
+   $(document).on('knack-view-render.view_5552', function(event, view, data){
+    addImagePreview();
+   });
+   
+   $(document).on('knack-view-render.view_5619', function(event, view, data){
+    addImagePreview();
+   });
+   
+   //view_5504
+   $(document).on('knack-view-render.view_5504', function(event, view, data){
+    addImagePreview();
+   });
+   //view_5503
+   $(document).on('knack-view-render.view_5503', function(event, view, data){
+    addImagePreview();
+   });
+   //view_5436
+   $(document).on('knack-view-render.view_5436', function(event, view, data){
+    addImagePreview();
+   });
+   
+   //view_5499
+   $(document).on('knack-view-render.view_5499', function(event, view, data){
+    addImagePreview();
+   });
+   //view_5659
+   $(document).on('knack-view-render.view_5659', function(event, view, data){
+    addImagePreview();
+   });
+   
+   $(document).on('knack-view-render.view_3640', function(event, view, data){
+    $('#view_3640 button').prop('disabled', true);
+     const myInterval = setInterval(checkIfExist, 500);
+   
+      function checkIfExist(){
+        if( $('#view_5438').length === 0 ){
+        }else{
+            $('#view_3640 button').prop('disabled', false);
+            addImageToField()
+            clearInterval(myInterval);
+        }
+      }
+   
+      function addImageToField(){
+        var imageUrl = Knack.views.view_5438.model.data.models.map((b) => {return b})
+        imageUrl = imageUrl.map((b) => {return b.attributes.field_2237_raw})
+        removeOverlay3(imageUrl)
+      }
+   
+      function removeOverlay3(imageData){
+        var emailImage = '';
+        for(var i = 0; i < imageData.length; i++){
+          var imageUrl = "";
+          var start_url = "";
+          var end_url = "";
+          var new_url = "";
+          var orig_image;
+            
+          imageUrl = imageData[i];
+          if (imageUrl == undefined) return; 
+          start_url = imageUrl.split("upload");
+          if (imageUrl.includes("bo_5px_solid_black")) {
+                    
+                //remove overlay params in url
+                if (imageUrl.includes("fl_keep_iptc/v")) {
+                  end_url = start_url[1].split("fl_keep_iptc/v");
+              
+                } else {
+                  end_url = start_url[1].split("bo_5px_solid_black/v");
+                }
+   
+                new_url = start_url[0] + "upload/fl_keep_iptc/v" + end_url[1];
+                //end remove
+   
+          } else {
+            new_url = imageUrl;
+          }
+          emailImage = emailImage + `<img src="${ new_url }" width="300px">`;
+        }
+        $('#field_3018').val(emailImage).change();
+      }
+    
+   });
+
+  
