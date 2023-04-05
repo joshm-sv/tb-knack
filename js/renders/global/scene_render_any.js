@@ -22,5 +22,16 @@ async function initializeGoogleAnalytics() {
 }
 
 $(document).on('knack-scene-render.any', function(event, scene) {
-  initializeGoogleAnalytics();
+    initializeGoogleAnalytics();
+    showHideMenuText();
+    //List of the Page where the view exist to hide the side bar;
+    var viewsToHide = document.getElementById('view_3370');
+    if (viewsToHide) {
+        $('#kn-mobile-menu').addClass('hideMe')
+        //kn-app-header
+        $('#kn-app-header').addClass('hideMe')
+    } else {
+        $('#kn-mobile-menu').removeClass('hideMe')
+        $('#kn-app-header').removeClass('hideMe')
+    }
 });
