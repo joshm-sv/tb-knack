@@ -1,7 +1,6 @@
 const { searchParam,
   currentServiceDate,
-  prevServiceDate,
-  addImagePreview } = require('/js/custom_functions/custom');
+  prevServiceDate } = require('/js/custom_functions/custom');
 
 /*
 START Custom Date Filter
