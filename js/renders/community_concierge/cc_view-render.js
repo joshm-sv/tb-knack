@@ -1,4 +1,9 @@
 const { addStyleSheet, searchParam } = require('/js/custom_functions/custom');
+var asHeader = {
+    'X-Knack-Application-Id': Knack.application_id,
+    "X-Knack-REST-API-Key": window.knackRestApiKey,
+    'Authorization': Knack.getUserToken()
+};
 
 //scene_1254
 $(document).on('knack-view-render.view_3754', function(event, view, data){
