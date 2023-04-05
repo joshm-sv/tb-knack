@@ -1,4 +1,4 @@
-const { showHideMenuText } = require('/js/custom_functions/custom');
+const { searchParam } = require('/js/custom_functions/custom');
 
 /*
 START Custom Date Filter
@@ -2946,9 +2946,7 @@ function getStillInProgress(){
  }
 }
 
-function searchParam(name) {
-   return (window.location.href.split(name + '=')[1] || '').split('&')[0];
-}
+
 //var currentBTC_back; //current Butler Timeclock scene back page
 //view_4118 - https://builder.sv.knack.com/apps/trashdash#pages/scene_1529
 $(document).on("knack-view-render.view_4118", function(event, view, data) {

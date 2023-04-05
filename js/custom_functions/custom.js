@@ -14,6 +14,11 @@ function addCCStyleSheet(){
       }
 }
 
+function searchParam(name) {
+    return (window.location.href.split(name + '=')[1] || '').split('&')[0];
+}
+
 module.exports = {
-    addCCStyleSheet: addCCStyleSheet
+    addCCStyleSheet: addCCStyleSheet,
+    searchParam: searchParam
 };

@@ -1,4 +1,4 @@
-const { addStyleSheet } = require('/js/custom_functions/custom');
+const { addStyleSheet, searchParam } = require('/js/custom_functions/custom');
 
 //scene_1254
 $(document).on('knack-view-render.view_3754', function(event, view, data){
