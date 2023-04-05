@@ -1456,4 +1456,3 @@ $(document).on('knack-form-submit.view_3568', function(event, view, record) {
  }
 
 // END NEW POPUP FOR COMMUNITY CONCIERGE
-

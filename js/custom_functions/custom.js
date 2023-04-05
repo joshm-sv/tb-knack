@@ -20,7 +20,7 @@ function showHideMenuText() {
         $('#custom_menu_id li').addClass('bigger-icon');
         $('.sv-bottom-menu').addClass('bigger-icon');
         $('#custom_menu_id').addClass('adjust-margin-top-60px');
-    
+
     } else {
         $('.custom-menu-text').removeClass('hideMe');
         $('#custom_menu_id li').removeClass('bigger-icon');
@@ -33,8 +33,25 @@ function searchParam(name) {
     return (window.location.href.split(name + '=')[1] || '').split('&')[0];
 }
 
+function prevServiceDate(){
+    var d = new Date(currentServiceDate());
+    d.setDate( d.getDate() - 1 );
+    return d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
+ }
+ 
+ function currentServiceDate(){
+  if(0 > timeDiff) { return currentDate}
+    else {
+      var d = new Date(currentDate);
+    d.setDate( d.getDate() - 1 );
+        return d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
+    }
+ }
+
 module.exports = {
     addCCStyleSheet: addCCStyleSheet,
     searchParam: searchParam,
-    showHideMenuText: showHideMenuText
+    showHideMenuText: showHideMenuText,
+    prevServiceDate: prevServiceDate,
+    currentServiceDate: currentServiceDate
 };

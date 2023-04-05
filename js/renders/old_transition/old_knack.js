@@ -1,4 +1,4 @@
-const { searchParam } = require('/js/custom_functions/custom');
+const { searchParam, currentServiceDate, prevServiceDate } = require('/js/custom_functions/custom');
 
 /*
 START Custom Date Filter
@@ -253,97 +253,9 @@ $(document).on('knack-view-render.view_4586', function(event, view, data) {
 
 
 /*
-//This is used to apply the custom date filter to multiple tables on the same page
- $(document).on('knack-scene-render.scene_XXX', function(event, view, data) {
- var filterTableParams = [{
-     'viewName':'view_XXX', 
-     'dateFieldId':'field_XXX'	
- },{
-     'viewName':'view_XXX', 
-     'dateFieldId':'field_XXX'  
- },{
-     'viewName':'view_XXX', 
-     'dateFieldId':'field_XXX'
- },{
-     'viewName':'view_XXX', 
-     'dateFieldId':'field_XXX'  
- }];
- 
- var dFilter = new DateFilter(filterTableParams, 'Clock In Timestamp', '#kn-scene_XXX', 0)
- dFilter.init();
- });
- 
-*/
-
-
-
-/*
 END CUSTOM DATE FILTER
 */
 
-
-
-
-//This is the view modification for Butlers - dropdown
-const butlerViews = {
-   ['Today\'s Services']: 'view_68',
-   ['Current Time Clocks']: 'view_457',
-
-}
-
-for (let view in butlerViews) {
-   $(document).on(`knack-view-render.${butlerViews[view]}`, () => {
-       $(`#${butlerViews[view]} .view-header h2`).html(`<i class="fa fa-chevron-down"></i>${view}<i class="fa fa-chevron-down"></i>`);
-       $(`#${butlerViews[view]} .view-header`).click(function() {
-           $(`#${butlerViews[view]} .kn-table-wrapper`).slideToggle(300, () => {
-               if ($(`#${butlerViews[view]} .view-header h2`).html().indexOf('down') > -1)
-                   $(`#${butlerViews[view]} .view-header h2`).html(`<i class="fa fa-chevron-up"></i>${view}<i class="fa fa-chevron-up"></i>`);
-               else
-                   $(`#${butlerViews[view]} .view-header h2`).html(`<i class="fa fa-chevron-down"></i>${view}<i class="fa fa-chevron-down"></i>`);
-           });
-       });
-   });
-}
-//end Butler view modification
-
-
-
-//This hides the clocked in timestamp on the Butler clock in form so that it can still collect information
-$(document).on("knack-view-render.view_5044", function(event, view, data) {
-   $("#kn-input-field_113").addClass('hideMe');
-});
-
-//This hides the clocked in timestamp on the Full time Butler clock in form so that it can still collect information
-$(document).on("knack-view-render.view_5199", function(event, view, data) {
-   $("#kn-input-field_1176").addClass('hideMe');
-});
-
-
-//This hides the timestamp fields on the Butler compactor-before form so that they can still collect information
-$(document).on("knack-view-render.view_78", function(event, view, data) {
-   $("#kn-input-field_103").addClass('hideMe');
-});
-
-//This hides the timestamp fields on the Butler compactor-before-inside form so that they can still collect information
-$(document).on("knack-view-render.view_98", function(event, view, data) {
-   $("#kn-input-field_103").addClass('hideMe');
-});
-
-//This hides the timestamp fields on the Butler compactor-after form so that they can still collect information
-$(document).on("knack-view-render.view_101", function(event, view, data) {
-   $("#kn-input-field_103").addClass('hideMe');
-});
-
-//This hides the timestamp fields on the Butler compactor-after-inside form so that they can still collect information
-$(document).on("knack-view-render.view_104", function(event, view, data) {
-   $("#kn-input-field_103").addClass('hideMe');
-});
-
-
-//This hides the timestamp fields on the Butler Clock Out form so that they can still collect information
-$(document).on("knack-view-render.view_5054", function(event, view, data) {
-  $("#kn-input-field_114").addClass('hideMe');
-});
 
 
 //This hides the clocked in timestamp on the Porter clock in form so that it can still collect information
@@ -384,252 +296,16 @@ $(document).on("knack-view-render.view_2798", function(event, view, data) {
    $("#kn-input-field_114").addClass('hideMe');
 });
 
-//This hides the timestamp fields on the Area Supervisor Dashboard Clock In form so that they can still collect information
-$(document).on("knack-view-render.view_3181", function(event, view, data) {
-   $("#kn-input-field_1176").addClass('hideMe');
-});
-
-//This hides the timestamp fields on the Area Supervisor "Time Punches" Clock In form so that they can still collect information
-$(document).on("knack-view-render.view_3089", function(event, view, data) {
-   $("#kn-input-field_1176").addClass('hideMe');
-});
-
-//This hides the timestamp fields on the Area Supervisor Clock Out form so that they can still collect information
-$(document).on("knack-view-render.view_3090", function(event, view, data) {
-   $("#kn-input-field_1177").addClass('hideMe');
-});
-
-//This hides the timestamp fields on the Area Supervisor Clock Out form so that they can still collect information
-$(document).on("knack-view-render.view_3088", function(event, view, data) {
-   $("#kn-input-field_1177").addClass('hideMe');
-});
-
-//SMS
-$(document).on('knack-record-create.view_1628', function(event, view, record) {
-   var smsListId = record.field_697_raw[0].id;
-   var message = record.field_698;
-
-   knackApi.findById(knackApi.OBJECT.COMM_SMS_LIST, smsListId).then((result) => {
-       //send the message to the linked number of smsListId
-       var number = result.field_692_raw.formatted;
-       $.ajax({
-           type: "POST",
-           url: "https://server.chhjny.com:3003/send",
-           data: JSON.stringify({
-               to: number,
-               message: message
-           }),
-           contentType: "application/json"
-       });
-   });
-});
-
-
-//SMS Bulk
-$(document).on('knack-record-create.view_1742', function(event, view, record) {
-   var communityId = record.field_715_raw[0].id;
-   var message = record.field_714;
-   var filter = {
-       'match': 'and',
-       'rules': [{
-           'field': 'field_711',
-           'operator': 'is',
-           'value': communityId
-       }]
-   };
-   Knack.showSpinner();
-   knackApi.find(knackApi.OBJECT.BULK_SMS_LIST, filter).then((result) => {
-       if (result.total_records > 0) {
-           var numbers = [];
-           result.records.forEach((record) => {
-               numbers.push(record.field_710_raw.formatted);
-           });
-
-           $.ajax({
-               type: "POST",
-               url: "https://server.chhjny.com:3003/send_multiple",
-               data: JSON.stringify({
-                   number_csv: numbers.join(","),
-                   message: message
-               }),
-               contentType: "application/json"
-           });
-       } else {
-           alert("No sms list item found with the selected community");
-           knackApi.delete("object_41", record.id); //delete the message
-       }
-       Knack.hideSpinner();
-   });
-});
-
-//SMS CSS Phone like thread display
-function responsiveChat(element) {
-   $(element).html('<form class="chat"><span></span><div class="messages"></div></form>');
-
-   function showLatestMessage() {
-       $(element).find('.messages').scrollTop($(element).find('.messages').height());
-   }
-
-   showLatestMessage();
-}
-
-function responsiveChatPush(element, sender, origin, date, message) {
-   var originClass;
-   if (origin == 'me') {
-       originClass = 'myMessage';
-   } else {
-       originClass = 'fromThem';
-   }
-   $(element + ' .messages').append('<div class="message"><div class="' + originClass + '"><p>' + message + '</p><date><b>' + sender + '</b> ' + date + '</date></div></div>');
-   $(element).scrollTop($(element)[0].scrollHeight);
-}
-
-var interval_view_1627 = null;
-var scheduleModelFetchTimeout_view_1627 = null;
-var chatScroll_view_1627 = -1;
-var prevDataLength_view_1627 = 0;
-
-$(document).on('knack-view-render.view_1627', function(event, view, data) {
-   $("#view_1627 div.kn-table-wrapper").html('')
-   $("#view_1627 div.kn-records-nav").remove();
-
-   /* Activating chatbox on element */
-   responsiveChat('#view_1627 div.kn-table-wrapper');
-   data.forEach((message) => {
-       var messageClass = message.field_700 == 'TB Response' ? "me" : "you";
-       var name = message.field_700 == 'TB Response' ? message.field_702_raw[0].identifier : "Customer";
-       responsiveChatPush('.chat', name, messageClass, message.field_703, message.field_698);
-   });
-
-
-   //retain the scroll position of the chat box
-   if (chatScroll_view_1627 > -1 && prevDataLength_view_1627 == data.length) {
-       $(".chat").scrollTop(chatScroll_view_1627);
-   }
-
-   prevDataLength_view_1627 = data.length;
-
-   //make sure that the poll function has not been started yet
-   //and also there is no scheduled event to start the poll function
-   if (interval_view_1627 == null && scheduleModelFetchTimeout_view_1627 == null) {
-       interval_view_1627 = setInterval(function() {
-           Knack.views.view_1627.model.fetch();
-       }, 1000);
-   }
-
-   //when scrolling for that sms messages, stop the polling of new messages for smooth scrolling
-   //resume only after the scroll stopped and 500ms has passed.
-   $(".chat").off().on("scroll", function() {
-       chatScroll_view_1627 = $(".chat").scrollTop();
-       clearInterval(interval_view_1627);
-       interval_view_1627 = null;
-       if (scheduleModelFetchTimeout_view_1627 != null) {
-           clearTimeout(scheduleModelFetchTimeout_view_1627);
-       }
-
-       scheduleModelFetchTimeout_view_1627 = setTimeout(function() {
-           interval_view_1627 = setInterval(function() {
-               Knack.views.view_1627.model.fetch();
-           }, 1000);
-       }, 500);
-   });
-});
-
-//when butler sends message, append to message thread view_1628
-$(document).on('knack-record-create.view_1628', function(event, view, record) {
-   responsiveChatPush('.chat', record.field_702_raw[0].identifier, "me", record.field_703, record.field_698);
-});
-
-//accordion stuff
-$.fn.toAccordion = function() {
-   var generateAccordionRow = function(rowData, index, view_id) {
-       var hasContent = rowData.content.length > 0;
-       var mainDiv = $("<div> </div>");
-       var checked = index == 0 ? "checked='true'" : "";
-       var disableClick = hasContent ? "" : "disabled";
-       var clickControl = $(`<input id='faq-${view_id}-${index}' name='faq-${view_id}' type='radio' ${disableClick}>`);
-       var header = $(`<label for='faq-${view_id}-${index}'>${rowData.header}</label>`);
-
-       mainDiv.append(clickControl);
-       mainDiv.append(header);
-
-       if (hasContent) {
-           var contentContainer = $('<article class="ac-small"> </article>');
-           var content = $(`<p>${rowData.content}</p>`);
-           contentContainer.append(content);
-           mainDiv.append(contentContainer);
-       }
-
-       return mainDiv;
-   };
-
-   //this is the view object
-   var view_id = $(this).attr("id");
-   var faqAccContainer = $('<section class="ac-container"></section>');
-   $(this).find("table.kn-table").parent().css("display", "none");
-   $(this).find("table.kn-table tbody tr").each((idx, tr) => {
-       var faqAccordionData = {
-           header: '',
-           content: ''
-       };
-
-       if ($(tr).hasClass('kn-tr-nodata')) {
-           faqAccordionData.header = 'No Data';
-       } else {
-           $(tr).find("td").each((i, td) => {
-               var text = $.trim($(td).text());
-               if (i == 0) { //header
-                   faqAccordionData.header = text;
-               } else { //content
-                   faqAccordionData.content = text;
-               }
-           });
-       }
-
-       var accordionData = generateAccordionRow(faqAccordionData, idx, view_id);
-       faqAccContainer.append(accordionData);
-   });
-   $(this).append(faqAccContainer);
-   return this;
-};
-
-//The tables listed in this view array should:
-// - only have 2 columns, first column will be displayed has the header, and the second is the content of the accordion
-// - should not display any other element besides the table, so no pagination, filter, search.
-var tablesToAccordionViews = ['view_2246', 'view_2245', 'view_2244', 'view_2243', 'view_2242', 'view_2241', 'view_2240'];
-
-tablesToAccordionViews.forEach((view_id, idx) => {
-   $(document).on(`knack-view-render.${view_id}`, function(event, view, data) {
-       $(`#${view_id}`).toAccordion();
-   });
-});
-
-
-
 //Community Concierge Section
 //May 2021
 
-var loggedInState = { 'clocked_in': undefined, 'clockedTime' : '', 'clockedDate' : ''};
 var currentEstDT = new Date();
 var currentDate = currentEstDT.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric', timeZone: 'America/New_York' });
 currentEstDT = currentEstDT.toLocaleString('en-US', {timeZone: 'America/New_York'}).replace(",","");
 currentEstDT = new Date(currentEstDT);
 var endServiceDate = new Date(currentDate+" 6:00:00 AM");
 var timeDiff = endServiceDate - currentEstDT;
-function prevServiceDate(){
-   var d = new Date(currentServiceDate());
-   d.setDate( d.getDate() - 1 );
-   return d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
-}
 
-function currentServiceDate(){
- if(0 > timeDiff) { return currentDate}
-   else {
-     var d = new Date(currentDate);
-   d.setDate( d.getDate() - 1 );
-       return d.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' })
-   }
-}
 
 //Add Login/Logout Session Log Records object_89
 var LOGIN_PAGE = false;
@@ -686,50 +362,6 @@ var asHeader = {
      "X-Knack-REST-API-Key": window.knackRestApiKey,
      'Authorization': Knack.getUserToken()
 };
-var ASclock;
-//view_4192 Dashboard
-$(document).on("knack-view-render.view_4193", function(event, view, data) {
-   $('#view_4193').hide();
-   var c = { 'isClockIn' : data.field_1179_raw, 'time': data.field_1966 }
-   ASclock = c;
-});
-var showPopUpAs = true;
-var getLateServicesLoaded = false;
-function getLateServices(){
- if(Knack.session.user && !getLateServicesLoaded){
-   var myVar = setInterval(refreshInterval, 30000);
-   function refreshInterval(){
-     return $.ajax({
-       type: 'GET',
-       headers: asHeader,
-       url: 'https://api.sv.knack.com/v1/pages/scene_1437/views/view_4069/records',
-       success: function(data) {
-         as_lateNotif(data.records)
-       }
-     });
-   }
- }else{
-   $('#as_late_notif')
- }
-}
-
-function getLoggedInState(){
- return $.ajax({
-   type: 'GET',
-   headers: asHeader,
-   url: 'https://api.sv.knack.com/v1/pages/scene_1417/views/view_4193/records/' + Knack.session.user.profile_objects[0].entry_id,
-   success: function(data) {
-     loggedInState.clocked_in = data.field_1179_raw
-     loggedInState.clockedTime = data.field_1966
-     try{
-       loggedInState.clockedDate = data.field_1966_raw.date
-     }
-   catch(err){
-     
-     }
-   }
- });
-}
 
 // This will check if the current logged in user have a butler role
 var userObjectRoles;
@@ -751,7 +383,7 @@ as_scenes.forEach((item, index) => {
            var loginPage = $('.kn-login').length == 1 ? true : false;
            var clockinStateHTML = `<p id="as_clock_status" class="as-tce hideMe"></p>`
            if($('#as_clock_status').length === 0 & !loginPage){ $('#kn-app-header').append(clockinStateHTML) }
-           if(Knack.session.user){ getLoggedInState();} //Get Logged In State When Logged In
+
            $('#kn-scene_1417').length ? $('#kn-app-header').hide() : $('#kn-app-header').show()
            //This check if Knack's Backlink exist -> Create a copy for the Custom Backlink in the Top of the existing scene
            var backLinkExist = setInterval(checkBackLink, 1000);
@@ -846,168 +478,7 @@ function addImagePreview(){
  }
 }
 
-function addCustomMenuSv(){
-   var menuList =  [
-/*    {	title: 'Clock In Page',
-       icon: "",
-       link: Knack.url_base+"#area-command-center/"
-   },*/
-   {	title: 'Pre-Service Dashboard',
-       icon: "",
-       link: Knack.url_base+"#area-command-center/dashboards/pre-service-dashboard/"
-   },{	title: 'In-Service Dashboard',
-       icon: "",
-       link: Knack.url_base+"#area-command-center/dashboards/in-service-dashboard"
-   },{	title: 'Post-Service Dashboard',
-       icon: "",
-       link: Knack.url_base+"#area-command-center/dashboards/post-service-dashboard/"
-   },{	title: 'View All Workflows',
-       icon: "",
-       link: Knack.url_base+"#area-command-center/dashboards/view-all-workflow/"
-   },{	title: 'Quick Links',
-       icon: "",
-       link: Knack.url_base+"#area-command-center/dashboards/quick-links/"
-   },{	title: 'My Profile',
-       icon: "",
-       link: Knack.url_base+"#area-command-center/dashboards/my-profile/"
-   }
-   ,
-   {	title: `Switch to Butler View`,
-       icon: "fa-exchange",
-       link: Knack.url_base+"#butler/"
-   }
-   ]
-   var list = ``;
-   for (let i = 0; i < menuList.length; i++) {
-     var icon = `<i style="margin-top: 3px;" class="fa ${menuList[i].icon}"></i>`;
-   //   var icon = ''
-     list = list + `<li><a href=${menuList[i].link} class="sv-cm-navbar"><span class="custom-menu-text">${icon}  ${menuList[i].title}</span></a></li>`;  
-   }
-   Knack.navList = list;
-   var customMenu = `<ul id="custom_menu_id" style="list-style-type:none;">${list}</ul>`;
-   if($('#custom_menu_id').length === 0){ $('#kn-mobile-menu').append(customMenu); }
-   if(!isButler){
-       $($('#custom_menu_id li')[6]).remove()
-   }else{
-       $($('#custom_menu_id li a')[6]).attr("target","_blank");
-       // $($('#custom_menu_id li')[6]).remove() //Not yet live
-   }
-}
-//scene_1417 Hide other views (used for linked page) in the CLOCK IN PAGE
-$(document).on("knack-scene-render.scene_1417", function(event, scene) {
-   $('#view_3808').hide();
-   $('#view_3823').hide();
-   $('#view_3825').hide();
-});
 
-//view_3825 User Butler List hide
-$(document).on("knack-view-render.view_3825", function(event, view, data) {
-   $('#view_3825').hide();
-});
-
-//view_3925
-$(document).on("knack-view-render.view_3925", function(event, view, data) {
-   $('.as_number_of_service_today').html(data.length);
-   $('#view_3925').hide();
-});
-
-//view_3924 Clock in
-var clockRunning = false;
-$(document).on("knack-view-render.view_3924", function(event, view, data) {
- window.location.href = Knack.url_base + '#area-command-center/dashboards/'
-});
-//view_3956 AS Clock In Record For Today
-$(document).on("knack-view-render.view_3956", function(event, view, data) {
-     $('.kn-action-link').hide();
-       $('#view_3956 .kn-action-link').on("click", function(){
-           Knack.views.view_4193.model.fetch();
-           ASclock = undefined;
-           $('#as_clock_status').remove();
-         })
-         $('.field_1176').hide(); $('.field_1190').hide();
-         if(data.length > 0 ){
-           var clockedInText = 'You are already clocked in at <br><span class="svClockIn">' +data[0].field_1176+'</span>';
-           var newTxt = `<br><div><h3 class="kn-title">Ready to Clock Out?</h3><hr><div>Have you verified that all services are completed and all Butlers have properly clocked out?</div></div>`;
-           var nt2 = `<div id="clock_out"><p class="as-ready-out-main as-sub">YES, I'M READY TO CLOCK OUT →</p></div>`
-           $('.as_is_clocked_in').html(clockedInText + newTxt + nt2);
-         }
-     $('#clock_out').on('click', function(){
-         $('#clock_out').hide();
-           $('.kn-action-link').show();
-       })
-        
-});
-//view_3856 Butler Timeclock Details - click to view hide link popup if timeclock is 0
-$(document).on("knack-view-render.view_3856", function(event, view, data) {
-   try{ 
-   $('#view_3856').attr('service-id', data.id)
-   $('#view_3856').attr('area-id', data.field_485_raw[0].id)
-   $('#view_3856').attr('com-id', data.field_54_raw[0].id)
-   data.field_809 === 0 ? $('#view_3856 .kn-details-link').hide() : $('#view_3856 .kn-details-link').show();}
-   catch(err){ console.log(err) }
-});
-
-//view_3958 Preservice Dashboard Service IDs
-$(document).on("knack-view-render.view_3958", function(event, view, data) {
-   $('#view_3958').hide();
-});
-
-//view_3959  Preservice Dashboard New Butlers
-$(document).on("knack-view-render.view_3959", function(event, view, data) {
-   $('#view_3959').hide();
-});
-
-//view_3960  Preservice Dashboard Support Tickets
-$(document).on("knack-view-render.view_3960", function(event, view, data) {
-   $('#view_3960').hide();
-});
-
-
-var serviceIDsharedViews = [
- 'view_3850', 'view_4732', 'view_4760'
-]
-//view_3850 Review Service ID List Data Source (Service IDs > Area)
-serviceIDsharedViews.forEach((view_id, idx) => {
- $(document).on("knack-view-render."+view_id, function(event, view, data) {
-   $('.field_1025').hide(); $('.field_46').hide(); $('.field_121').hide();
-   $('.field_300').hide();
-   $('.field_359').hide(); $('.field_170').hide(); //realService Schedule Time
-   for (let i = 0; i < data.length; i++) {
-     var classService;
-     //if time started override have data > hide the original time started field
-     data[i].field_793 == '' ? $($('.field_793')[i]).hide() : $($('.field_122')[i]).hide() ;
-     data[i].field_1929 == '' ? $($('.field_1929')[i]).hide() : $($('.field_265')[i]).hide() ;
-     if(data[i].field_121 == 'Complete'){ classService = "sv-pass" }
-     else if(data[i].field_121 == 'Pending'){ classService = "sv-fail"; }
-     else{ classService = "sv-not-reviewed" }
-     if(data[i].field_1025 == ""){
-       $($('.as_service_id_pass_fail')[i]).html("Not Reviewed").addClass("sv-not-reviewed").addClass("sv-stats");
-       $($('.as_edit_review')[i]).hide();
-       $($('.as_start_review')[i]).show();
-     }
-     if(data[i].field_1025 == "Fail"){ 
-       $($('.as_service_id_pass_fail')[i]).html("Failed").addClass("sv-fail").addClass("sv-stats");
-       $($('.as_edit_review')[i]).show();
-       $($('.as_start_review')[i]).hide();
-     }
-     if(data[i].field_1025 == "Pass"){ 
-       $($('.as_service_id_pass_fail')[i]).html("Passed").addClass("sv-pass").addClass("sv-stats"); 
-       $($('.as_edit_review')[i]).show();
-       $($('.as_start_review')[i]).hide();
-     }
-     data[i].field_300 === 0 ? $($('.kn-list-item-container')[i]).find('.field_362').hide() : $($('.kn-list-item-container')[i]).find('.field_362').show();
-     if(data[i].field_121 != "Complete"){ $($('.as_edit_review')[i]).prop('disabled', true); $($('.as_start_review')[i]).prop('disabled', true); 
-                                         $($('.as_edit_review')[i]).addClass('disabledButtons'); $($('.as_start_review')[i]).addClass('disabledButtons'); } 
-     else{ $($('.as_edit_review')[i]).removeClass('disabledButtons'); $($('.as_start_review')[i]).removeClass('disabledButtons'); }
-
-     var serviceStatus =`<span class="as-service-status ${classService}">Status: ` +data[i].field_121+`</span>`;
-     var serviceTimeDate = data[i].field_46 + ` - ` +data[i].field_170;
-     var radarLogsText =  data[i].field_360+ '/' +data[i].field_300;
-     $($($('.field_360')[i]).children('div')[1]).children('span').html(radarLogsText);
-     $($('.as-service-date-time')[i]).html(serviceStatus+' <br> '+serviceTimeDate);
-   }
- });
-})
 
 //CREATE CUSTOM ACCORDION LIST
 var customAccor = [
@@ -4048,12 +3519,6 @@ $(document).on('knack-view-render.view_5035', function(event, view, data){
    }
   $($('#view_5035').parents()[0]).hide();
 });
-
-//view_5039
-$(document).on('knack-view-render.view_5039', function(event, view, data){
-  $('#sv_show_popup').click();
-  $($('#view_5039').parents()[0]).hide();
-});
 //$('#view_3812 .kn-link-5').hide()
 $(document).on('knack-view-render.view_3812', function(event, view, data){
  $('#view_3812 .kn-link-5').hide()
@@ -4110,22 +3575,6 @@ $(document).on('knack-view-render.view_5278', function(event, view, data){
 
 });
 
-//view_5054 Highligh Icon when clicked 
-$(document).on('knack-view-render.view_5054', function(event, view, data){
-   $('#view_5054 input[type=radio]').on('click', function(){
-       $($(this).parents()[1]).addClass('sv-icon-highlight')
-       $($($(this).parents()[1]).siblings()[0]).removeClass('sv-icon-highlight')
-   })
-});
-
-
-//view_5054
-$(document).on('knack-form-submit.view_5054', function(event, view, record) {
- if( record.field_2793 != '' ){ // if Butler Timeclock Thumbs Up/Down is not blank, insert a record to the Butler Service Ratings
-     KnackViewApi.SaveObject('scene_950', 'view_5183', { 'field_2796' : record.id }).then((res) => {
-     });
- }
-});
 
 $(document).on('knack-view-render.view_5209', function(event, view, data){
  $('#view_5209').append(`<section id="sv_popup_prev"></section>`)
@@ -4168,146 +3617,6 @@ $(document).on('knack-view-render.view_5214', function(event, view, data){
            });
        }
    })
-});
-
-var allDismissedB;
-var allLive = [];
-// view_5223
-$(document).on('knack-view-render.view_5223', async function(event, view, data){
-   $('#kn-scene_7 .view-group-4').addClass('hideMe')
-   var userProfKeys = Knack.session.user.profile_keys;
-   var isDev = userProfKeys.includes('profile_34');
-   var allLiveData = Knack.views.view_5039.model.data.map((b) => {return b.attributes})
-   await getLivePopUpsB();
-   await checkIfOpenPopup();
-   
-   function getLivePopUpsB(){
-     if(isDev){
-       allLive = Knack.views.view_5039.model.data.map((b) => {return b.id})
-     }else{
-       for (let i = 0; i < allLiveData.length; i++) {
-         if( !allLiveData[i].field_2881_raw ){ allLive.push( allLiveData[i].id ) }
-       }
-     }
-   }
-
-   function checkIfOpenPopup(){
-     $('#view_5223-field_2892').val() == null ? allDismissedB = [] : allDismissedB = $('#view_5223-field_2892').val()
-     for (let i = 0; i < allLive.length; i++) {
-       if( !allDismissedB.includes(allLive[i]) ){ 
-         $($('#view_5218 .kn-link')[0]).find('span').click();
-         break;
-       }
-     }
-   }
-});
-
-//view_5219
-$(document).on('knack-view-render.view_5219', async function(event, view, data){
- if( $('.sv_carousel_bs').length == 0 ){
-   var sv_car = `<link class="sv_carousel_bs" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">`;
-   $('head').append(sv_car);
-   $('head').append(`<script class="lazyload" src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>`)
-   $('head').append(`<script class="lazyload" src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>`)
-   $('head').append(`<script class="lazyload" src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>`)
- }
- redirectToButlerPageIfNotModal()
- var userProfKeys = Knack.session.user.profile_keys;
- var isDev = userProfKeys.includes('profile_34');
- $($('#view_5219').parents()[1]).hide()
- $('.field_2648').hide();
- try{ 
-   $('#kn-scene_1904').removeClass('kn-scene').css('text-align', 'center')
-   $('#view_5219 img').css('width', '100%')
-   if( $('#view_5223').length > 0  ){//Check if the form exist
-      var allDismissed = [];
-      allDismissed.push(data[0].id)
-      $('#view_5223-field_2892').val(allDismissed).trigger("liszt:updated").change();
-      $('#view_5219 button').on('click', function(){
-          $('.close-modal').click()
-          $('#view_5223 .kn-submit button').click();
-      })
- }}catch(err){console.log(err)}
- var notDismissed = [];
- function getNotDismissed(){
-     for (let i = 0; i < data.length; i++) {
-       if( !allDismissedB.includes( data[i].id ) ){
-         if( isDev ){ notDismissed.push(data[i]) }
-         else{
-           if( !data[i].field_2881_raw){
-             notDismissed.push(data[i])
-           }
-         }
-       }
-     }
-  }
-  function checkIfWillCreatePopUp(){
-    if(notDismissed.length == 0){
-      $('.close-modal').click()
-    }else{
-      createPopup(notDismissed, "scene_1904")
-    }
-  }
-  await getNotDismissed()
-  await checkIfWillCreatePopUp()
-  $('.carousel-inner img').css('width', "100%")
-
-  await addButtonFunction()
-});
-
-function updateButlerDismissedPopup(allDismissed){
-   var currentRoles = Knack.session.user.profile_objects;
-   var currentButlerId = currentRoles.find(x => x.object == "object_4").entry_id
-   return $.ajax({
-         type: 'PUT',
-         headers: asHeader,
-         url: 'https://api.sv.knack.com/v1/pages/scene_7/views/view_5223/records/'+currentButlerId,
-         data: {
-           field_2892: allDismissed
-         },
-         success: function(res) {
-         }
-   });
-}
-
-function addButtonFunction(){
- $('.sv_dont_show').on('click', function(){
-     allDismissedB.push( $(this).attr('data-id') )
-     $($(this).parents()[0]).remove()
-     $($('.carousel-item')[0]).addClass('active')
-     
-     updateButlerDismissedPopup(allDismissedB)
-     if( $('.carousel-item').length === 0 ){
-         $('.close-modal').click()
-     }
-
-     if( $('.carousel-item').length == 1 ){
-       $('#carousel_control').remove()
-     }
- })
-}
-
-function redirectToButlerPageIfNotModal(){
- if( $('.modal-card-head').length === 0 ){ 
-    window.location.href = 'https://apps.sv.knack.com/trashdash#butler'
- }
-}
-
-// view_68 Butler Today's Services
-$(document).on('knack-view-render.view_68', function(event, view, data){
- // Create the label as a jQuery object
- const label = $('<p>').html(`<span class="kn-detail-label"><span style="font-weight: bold;">Community Entry Gate Code</span></span>`);
-
- // Add the label to the table rows
- $('tbody .field_938').prepend(label);
-
- // Handle table row clicks
- $('#view_68 tr').on('click', function() {
-   // Redirect to the linked page
-   const href = $(this).find('a').attr('href');
-   window.location.href = href;
-   return false;
- });
 });
 
 function addNewPopCMActivityLog(comId, addToCMActiveField){
@@ -4744,68 +4053,6 @@ $(document).on('knack-view-render.view_5508', function(event, view, data){
  $('#infraction_fotorama').removeClass('hideMe')
 });
 
-//view_4089 Butler Report service hazard 
-$(document).on('knack-view-render.view_4089', function(event, view, data){
- $("#view_4089-field_1500").prop("selectedIndex", 1).trigger("liszt:updated").change();
-});
-
-//view_5439
-$(document).on('knack-form-submit.view_5439', function(event, view, record) {
- $('#view_5439').hide();
- $('.edit-hazard-form').show();
-});
-
-function transformImage(dataImage){
- var imageUrl = "";
- var start_url = "";
- var end_url = "";
- var new_url = "";
- var orig_image;
-    
- imageUrl = dataImage;
- if (imageUrl == undefined) return; 
- start_url = imageUrl.split("upload");
- if (imageUrl.includes("bo_5px_solid_black")) {
-           
-       //remove overlay params in url
-       if (imageUrl.includes("fl_keep_iptc/v")) {
-         end_url = start_url[1].split("fl_keep_iptc/v");
-     
-       } else {
-         end_url = start_url[1].split("bo_5px_solid_black/v");
-       }
-       new_url = start_url[0] + "upload/fl_keep_iptc/v" + end_url[1];
-       //end remove
-       
- } else {
-   new_url = imageUrl;
- }
- return new_url;
-}
-
-function combineImagesAndDeletedField(img, del){
- var image = img;
- var isDeleted = del;
- var imageArray = image.split(", ").map(function(img) {
-   var id = img.match(/id="(.*?)"/)[1];
-   var src = img.match(/src="(.*?)"/)[1];
-   return { id: id, src: src };
- });
- var isDeletedArray = isDeleted.split(", ").map(function(del) {
-   var id = del.match(/id="(.*?)"/)[1];
-   var deleted = del.match(/>(.*?)</)[1];
-   return { id: id, deleted: deleted };
- });
-
- var result = imageArray.map(function(img) {
-   var deleted = isDeletedArray.find(function(del) {
-     return del.id === img.id;
-   }).deleted;
-   return { id: img.id, src: img.src, deleted: deleted };
- });
- return result;
-}
-
 //view_5499
 
 $(document).on('knack-view-render.view_5499', function(event, view, data){
@@ -4840,22 +4087,6 @@ $(document).on('knack-view-render.view_5499', function(event, view, data){
 //view_5659
 $(document).on('knack-view-render.view_5659', function(event, view, data){
  addImagePreview();
-});
-
-var doneUploadBtnArray = ['view_5506', 'view_5507', 'view_5512', 'view_5551']; //I'M DONE UPLOADING PHOTOS
-
-doneUploadBtnArray.forEach((view_id, idx) => {
-   $(document).on(`knack-view-render.${view_id}`, function(event, view, data) {
-     $(`#${view_id}`).css('text-align', 'center')
-     $(`#${view_id}`).css('cursor', 'pointer')
-        $(`#${view_id}`).on('click', function(){
-           if( $('.delete.close-modal').length > 0 ){
-               $('.delete.close-modal').click();
-           }else{
-               window.history.back();
-           }
-       })
-   });
 });
 
 //home_slug
