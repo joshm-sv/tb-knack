@@ -215,20 +215,20 @@ function addLinkToCommunityDashboard(cid) {
     $('.field_1629').hide();
  
     let varId = cid;
-    $('#com_dashboard a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId);
-    $('#com_service_history a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/community-service-history/" + varId);
-    $('#com_infractions a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/infractions/" + varId);
-    $('#com_radar a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/radar-and-units/" + varId);
-    $('#com_hazards a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/service-hazards/" + varId);
-    $('#com_support_tickets a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/community-support-tickets/" + varId);
-    $('#com_account_billing a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/account-billing/" + varId);
-    $('#com_profile a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/my-community-profile/" + varId);
+    $('#com_dashboard a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId);
+    $('#com_service_history a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/community-service-history/" + varId);
+    $('#com_infractions a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/infractions/" + varId);
+    $('#com_radar a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/radar-and-units/" + varId);
+    $('#com_hazards a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/service-hazards/" + varId);
+    $('#com_support_tickets a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/community-support-tickets/" + varId);
+    $('#com_account_billing a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/account-billing/" + varId);
+    $('#com_profile a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/my-community-profile/" + varId);
     //
-    $('#com_radarLogs a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/radar-logs/" + varId);
-    $('#com_comLogs a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/community-logs/" + varId);
+    $('#com_radarLogs a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/radar-logs/" + varId);
+    $('#com_comLogs a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/community-logs/" + varId);
     //back_to_dashboard
-    $('#sv-top-back a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId);
-    $('#user_guide a').attr("href", "https://apps.sv.knack.com/trashdash#community-concierge/community-dashboard/" + varId + "/cc-training-v2/" + varId);
+    $('#sv-top-back a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId);
+    $('#user_guide a').attr("href", "https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge/community-dashboard/" + varId + "/cc-training-v2/" + varId);
     var timeout = setTimeout(function() {
         document.getElementById('custom_menu_id').style.display = 'block';
         clearTimeout(timeout);
@@ -248,7 +248,7 @@ function appendCustomMenuBottom() {
     $('#kn-mobile-menu').append(customMenu);
     var customMenuBottom = $(`
         <ul class="sv-bottom-menu" style="list-style-type: none;">
-          <li><a href="https://apps.sv.knack.com/trashdash#community-concierge">  ${myComIcon} <span class="custom-menu-text"> My Communities </span></a></li>
+          <li><a href="https://apps.sv.knack.com/trash-dash-copy-notasks-262023#community-concierge">  ${myComIcon} <span class="custom-menu-text"> My Communities </span></a></li>
           <li><a href="#" class="kn-log-out">${logOutIcon} <span class="custom-menu-text"> Log Out</a> </span></li></ul>
       </ul>`);
     var checkIfExist = document.getElementsByClassName('sv-bottom-menu');
@@ -1107,7 +1107,7 @@ $(document).on("knack-view-render.view_3473", function(event, view, data) {
  
  });
  
- //view_3618 Add Support Ticket - Contact Support Ticket - https://builder.sv.knack.com/apps/trashdash/pages/scene_1357/views/view_3618/form
+ //view_3618 Add Support Ticket - Contact Support Ticket - https://builder.sv.knack.com/apps/trash-dash-copy-notasks-262023/pages/scene_1357/views/view_3618/form
  //this will hide the other option
  $(document).on("knack-view-render.view_3618", function(event, view, data) {
     $('#kn-input-field_309 .kn-datetime').hide();
