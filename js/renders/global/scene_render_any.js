@@ -1,3 +1,5 @@
+const { showHideMenuText } = require('/js/custom_functions/custom');
+
 const measurementID = 'G-3XYXWWXX44';
 
 async function initializeGoogleAnalytics() {
