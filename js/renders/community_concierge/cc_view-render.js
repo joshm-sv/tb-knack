@@ -1122,3 +1122,333 @@ $(document).on("knack-view-render.view_3473", function(event, view, data) {
         clearTimeout(timeout);
     }, 500);
  });
+
+//view_3568 Service History Pop up
+$(document).on('knack-form-submit.view_3568', function(event, view, record) {
+    $('.close-modal').click();
+   $('#view_3396 form a').click();
+   });
+   
+   //view_3506 Dashboard Infraction Pop Up
+   //this will refresh the Open Infractions (Dashboard) Table when submitted
+   $(document).on('knack-form-submit.view_3506', function(event, view, record) {
+      if($('#view_3557')){$('#view_3557 form a').click();}
+   });
+   
+   //Notify Resident Infraction
+   //view_3569
+   //this will refresh the Notify Resident Infraction Table when submitted
+   $(document).on('knack-form-submit.view_3569', function(event, view, record) {
+      if($('#view_3557')){$('#view_3557 form a').click();}
+   });
+   //view_3597
+   //this will refresh the Access Code Table when the edit form is submitted
+   $(document).on('knack-form-submit.view_3597', function(event, view, record) {
+       if($('#view_3596').length){$('#view_3596 form a').click() }//view_3719
+      if($('#view_3719').length){$('#view_3719 form a').click() }//Community Profile
+      if($('#view_3650').length){$('#view_3650 form a').click() }//view_3650 Edit Community Profile Page
+   });
+   
+   //view_3740
+   //this will refresh the Access Code Table when the DELETE form is submitted
+   $(document).on('knack-form-submit.view_3740', function(event, view, record) {
+       if($('#view_3596').length){$('#view_3596 form a').click(); }//view_3596
+      if($('#view_3719').length){$('#view_3719 form a').click(); }//Community Profile
+      if($('#view_3650').length){$('#view_3650 form a').click(); }//view_3650 Edit Community Profile Page
+      $($('.close-modal')[0]).click();
+   });
+   
+   //Notify Resident Infraction this will add the placeholder content of the email
+   $(document).on("knack-view-render.view_3569", function(event, view, data) {
+      Knack.showSpinner();
+      $('#view_3569 button').prop('disabled', true);
+      const myInterval = setInterval(checkIfExist, 800);
+   
+      function checkIfExist(){
+        if( $('#view_3442').length === 0 ){
+        }else{
+          $('#view_3569 button').prop('disabled', false);
+            Knack.hideSpinner();
+            mainViewFunction();
+            clearInterval(myInterval);
+        }
+      }
+      
+     
+     function mainViewFunction(){
+      $('#view_3729').hide();
+      $('#view_3569 #field_1554').hide();
+      $('#kn-input-field_614').hide();
+      $('#kn-input-field_615').hide();
+      $('#kn-input-field_338').hide();
+      var newTextArea = `<textarea class="kn-textarea" id="email_content" name="email_content"></textarea>`;
+      $('#kn-input-field_1554').append(newTextArea);
+      var image1 = $('.field_614 img').attr('src') ? $('.field_614 img').attr('src') : '';
+      var image2 = $('.field_615 img').attr('src') ? $('.field_615 img').attr('src') : '';
+      image1 = data.field_614 ? `<a href=${image1} target="_blank"><img src=${image1} height="600"></a>` : '';
+      image2 = data.field_615 ? `<a href=${image2} target="_blank"><img src=${image2} height="600"></a>` : '';
+      var emailMessage;
+      var emailContent = `
+        <div id="images_div"><p id="image_section"><span>${image1}</span><span>${image2}</span></p></div>
+        <hr>
+        <p id="content_id"></p>
+      `
+    if($('#view_3729 #images_div #image_section').length == 0){$('#view_3729 #images_div').append(`<p style="font-weight: bold;">Infraction Photos Documented by your Trash Butler</p><p id="image_section"><span>${image1}</span><span>${image2}</span></p>`);}
+    $('#view_3569 #field_1554').val($('#view_3729').html()).change();
+    $('input[name="field_1652"]').on("click", function(){
+        if($('#view_3569 input[name="field_1652"]').is(':checked')){
+             $('#view_3729 #images_div').append(`<p id="image_section"><span>${image1}</span><span>${image2}</span></p>`);
+           }
+        else{
+            $('#view_3729 #image_section').remove()
+        }
+        $('#view_3569 #field_1554').val($('#view_3729').html()).change();
+    });
+    $('#email_content').keyup(function(){
+      $('#view_3729 #content_id').html($('#email_content').val());
+      document.getElementById('content_id').value = document.getElementById('email_content').value;
+      $('#view_3569 #field_1554').val($('#view_3729').html()).change();
+      $('#view_3569 #field_338').val($('#content_id').val()).change();
+   
+    });
+     }
+});
+
+ // NEW POPUP FOR COMMUNITY CONCIERGE
+ var comsActivePopups = [] //Popups that will be shown
+ var comsScheduledPopups = [] //Popups in the Community's Field
+ var globalActivePopups = []; //All Active Global Popup
+ var popupScheduleLogs = []; //This community's Popup Schedule Logs
+ var popupIsOpen = false;
+ var currentCommunityId = '';
+ function openPopup(){
+         $($('#view_5229 .kn-link')[0]).find('span').click()
+         popupIsOpen = true;
+ }
+
+ async function createPopup(data, scene_id){
+     await createCarouselContainer(scene_id)
+     await createACarouselSection(data)
+     $($('#survey_popup .col')[1]).append( $('#view_5233') )
+ }
+
+ // CARAOUSEL FUNCTION
+     function createCarouselContainer(scene_id){
+         var car = `<div id="sv_popup_carousel_container" class="carousel slide" data-ride="carousel" data-interval="false">
+         <div class="carousel-inner">
+         </div>
+         </div>`;
+         $(`#kn-${scene_id}`).append(car);
+     }
+     function createACarouselSection(data){
+         for (let i = 0; i < data.length; i++) {
+             var url = '';
+             var isActive = '';
+             var carouselData = '';
+
+             !$('.carousel-item').hasClass('active') ? isActive = 'active' : isActive = ''
+             data[i].field_2879 ? url = data[i].field_2879_raw : url = ''
+
+             if(data[i].field_2653_raw === true){
+                 carouselData = `
+                 <div class="carousel-item ${isActive}">
+                 <h2> ${data[i].field_2648_raw}</h2>
+                 <div class="row align-items-center" id="survey_popup">
+                 <div class="col">
+                 <img src=${url}>
+                 <div class="pop-main-con">${data[i].field_2646}</div>
+                 </div>
+                 <div class="col"></div>
+                 </div>
+                 <button id="sv_dont_show_survey" class="sv_dont_show kn-button is-primary hideMe" data-id=${data[i].id} >Don't Show This Again</button>
+                 </div>`;
+
+                 $('#view_5233').show()
+             }else{
+               $('#view_5233').hide()
+                 carouselData =`
+                 <div class="carousel-item ${isActive}">
+                 <h2>${data[i].field_2648_raw}</h2>
+                 <img src=${url}>
+                 <div class="pop-main-con">${data[i].field_2646}</div>
+                 <button id="sv_dont_show_${i}" class="sv_dont_show kn-button is-primary" data-id=${data[i].id} >Don't Show This Again</button>
+                 </div>`;
+             }
+             $('#sv_popup_carousel_container .carousel-inner').append(carouselData);                
+         }
+         $($('#survey_popup .col')[1]).append( $('#view_5233') )
+         addPrevNextToCarousel(data.length)
+     }
+     function addPrevNextToCarousel(l){
+         var prevNext = '';
+         if( l > 1){
+             prevNext = ` <div id="carousel_control"><a class="carousel-control-prev" href="#sv_popup_carousel_container" role="button" data-slide="prev">
+                             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                             <span class="sr-only">Previous</span>
+                         </a>
+                         <a class="carousel-control-next" href="#sv_popup_carousel_container" role="button" data-slide="next">
+                             <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                             <span class="sr-only">Next</span>
+                         </a></div>`;
+             $('#sv_popup_carousel_container').append( prevNext )
+         }
+     }
+ // END
+
+ async function initializePopup(data){
+     comsActivePopups = [];
+     comsScheduledPopups = []
+     globalActivePopups = [];
+     popupScheduleLogs = [];
+     await getGlobalActivePopup().then(
+     );
+     await getCommunitySchedPopupField(data);
+     await checkIfActiveNotInCom();
+     await getPopupScheduleLog()
+ }
+ function getGlobalActivePopup(){
+     return $.ajax({
+         type: 'GET',
+         headers: asHeader,
+         url: 'https://api.sv.knack.com/v1/pages/scene_1253/views/view_5107/records',
+         success: function(res) {
+             var records = res.records
+             globalActivePopups = records.map((b) => {return b.id});
+         }
+     });
+ }
+ function updateCommunitySchedPopupField(){ //Update Community Scheduled Popup Fields
+     return $.ajax({
+         type: 'PUT',
+         headers: asHeader,
+         url: 'https://api.sv.knack.com/v1/pages/scene_1255/views/view_5224/records/'+currentCommunityId,
+         data: {
+             field_2489: comsScheduledPopups
+         }
+     });
+ }
+
+ function combineOldAndNewScheds(){
+     var newActiveSched = globalActivePopups.concat(comsScheduledPopups)
+     newActiveSched = newActiveSched.filter((e, i, a) => a.indexOf(e) === i);
+ }
+
+ async function createPopupScheduleLog(id){
+     return $.ajax({
+             type: 'POST',
+             headers: asHeader,
+             url: 'https://api.sv.knack.com/v1/pages/scene_1255/views/view_5226/records',
+             data: {
+                 field_2893: currentCommunityId,
+                 field_2895: id
+             },
+             success: function(res) {
+             }
+     });
+ }
+
+ function getCommunitySchedPopupField(data){
+     if(data.field_2489_raw){ comsScheduledPopups = data.field_2489_raw.map((b) => {return b.id}); }        
+ }
+ async function getPopupScheduleLog(){
+   await refreshData()
+ }
+ async function checkIfActiveNotInCom(){
+     var updateCom = false;
+     if( globalActivePopups.length > 0 ){
+         function add(){
+             for (let i = 0; i < globalActivePopups.length; i++) {
+                 if( !comsScheduledPopups.includes(globalActivePopups[i]) ){
+                     updateCom = true;
+                     createPopupScheduleLog( globalActivePopups[i] )
+                     comsScheduledPopups.push( globalActivePopups[i] )
+                 }
+             }
+         }
+         await add()
+         if(updateCom){
+             await updateCommunitySchedPopupField()
+         }
+     }
+ }
+
+ 
+
+ // view_5230 CM Popup Log connected to the Logged in CM
+ $(document).on('knack-view-render.view_5230', async function(event, view, data){
+     $($('#view_5230').parents()[1]).addClass('hideMe')
+     $('#view_5233').hide()
+     await createPopup(data, "scene_1906")
+     await addButtonFunctionCom()
+ });
+ // TO optimize
+ function addButtonFunctionCom(){
+   $('.sv_dont_show').on('click', function(){
+       var popLogId = $(this).attr('data-id')
+       var currentCMRoles = Knack.session.user.profile_objects;
+       var currentCMId = currentCMRoles.find(x => x.object == "object_5").entry_id;
+       var stillVisibleTo = (Knack.views.view_5230.model.data.models[0].attributes.field_2894_raw).map((b) => {return b.id})
+       var newVistibleTo = stillVisibleTo.filter(item => item !== currentCMId)
+       $($(this).parents()[0]).remove()
+       $($('.carousel-item')[0]).addClass('active')
+       
+       updatePopLogCM(popLogId, newVistibleTo)
+       if( $('.carousel-item').length === 0 ){
+           $('.close-modal').click()
+       }
+
+       if( $('.carousel-item').length == 1 ){
+         $('#carousel_control').remove()
+       }
+   });
+
+   $('#sv_dont_show_survey').on('click', function(){//Redundant
+       var popLogId = $(this).attr('data-id')
+       var currentCMRoles = Knack.session.user.profile_objects;
+       var currentCMId = currentCMRoles.find(x => x.object == "object_5").entry_id;
+       var stillVisibleTo = (Knack.views.view_5230.model.data.models[0].attributes.field_2894_raw).map((b) => {return b.id})
+       var newVistibleTo = stillVisibleTo.filter(item => item !== currentCMId)
+       $($(this).parents()[0]).remove()
+       $($('.carousel-item')[0]).addClass('active')
+       
+       updatePopLogCM(popLogId, newVistibleTo)
+       if( $('.carousel-item').length === 0 ){
+           $('.close-modal').click()
+       }
+
+       if( $('.carousel-item').length == 1 ){
+         $('#carousel_control').remove()
+       }
+   });
+ }
+
+ function updatePopLogCM(popLogId, newVistibleTo){
+   return $.ajax({
+     type: 'PUT',
+     headers: asHeader,
+     url: 'https://api.sv.knack.com/v1/objects/object_148/records/'+popLogId,
+     data: {
+         field_2894: newVistibleTo
+     },
+     success: function(data) {
+         Knack.hideSpinner();
+         $('.close-modal').click();
+   }
+   });
+ }
+
+ async function refreshData(){
+     await Knack.views.view_5840.model.fetch()
+     await getData();
+     function getData(){
+         $(document).on('knack-view-render.view_5840', function(event, view, data){
+             popupScheduleLogs = data
+             if(data.length > 0){
+                 openPopup()
+             }
+         });
+     }
+ }
+
+// END NEW POPUP FOR COMMUNITY CONCIERGE
+
