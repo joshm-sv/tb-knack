@@ -15,19 +15,19 @@ const jsFilesToAdd = [
 ];
 
 // Get the absolute path of the 'renders' folder inside the 'js' folder
-const jsFolderPath = path.resolve(__dirname, 'js/renders');
-// Get the names of all subfolders within the 'js/renders' folder and map those names to their absolute paths
-const subFolderPaths = fs.readdirSync(jsFolderPath).map(subfolder => path.join(jsFolderPath, subfolder));
+// const jsFolderPath = path.resolve(__dirname, 'js/renders');
+// // Get the names of all subfolders within the 'js/renders' folder and map those names to their absolute paths
+// const subFolderPaths = fs.readdirSync(jsFolderPath).map(subfolder => path.join(jsFolderPath, subfolder));
 
-// For each subfolder path, get an array of JavaScript file paths and add them to 'jsFilesToAdd'
-subFolderPaths.forEach(function(subfolderPath) {
-  const files = fs.readdirSync(subfolderPath);
+// // For each subfolder path, get an array of JavaScript file paths and add them to 'jsFilesToAdd'
+// subFolderPaths.forEach(function(subfolderPath) {
+//   const files = fs.readdirSync(subfolderPath);
 
-  const jsFiles = files.filter(file => path.extname(file) === '.js')
-    .map(file => path.relative('./src', path.join(subfolderPath, file)));
+//   const jsFiles = files.filter(file => path.extname(file) === '.js')
+//     .map(file => path.relative('./src', path.join(subfolderPath, file)));
 
-  jsFilesToAdd.push(...jsFiles);
-});
+//   jsFilesToAdd.push(...jsFiles);
+// });
 
 // Export a configuration object used by Webpack to bundle and optimize code for development
 module.exports = {
