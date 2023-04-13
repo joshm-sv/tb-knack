@@ -37,6 +37,7 @@ $(document).on('knack-scene-render.any', function(event, scene) {
         $('#kn-app-header').removeClass('hideMe')
     }
 });
+var currentAppendedTheme;
 
 //'scene_1697','scene_1704','scene_1705','scene_1712','scene_1714','scene_1715','scene_1719','scene_1737','scene_1738','scene_1739','scene_1740','scene_1741','scene_1742','scene_1698','scene_1694',
 var geo_scenes = [ 'scene_1712', 'scene_1714', 'scene_1715', 'scene_1719', 'scene_1737', 'scene_1738', 'scene_1739', 'scene_1740', 'scene_877', 'scene_881', 'scene_882', 'scene_944', 'scene_945', 'scene_1628', 'scene_1632', 'scene_1662', 'scene_1663', 'scene_1664', 'scene_1666', 'scene_1665', 'scene_1667', 'scene_1668', 'scene_1897','scene_1897','scene_1900','scene_1903','scene_1905','scene_1899','scene_1902','scene_1901','scene_1922', 'scene_1924']
